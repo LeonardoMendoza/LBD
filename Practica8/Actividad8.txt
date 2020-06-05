@@ -1,0 +1,28 @@
+SELECT * FROM Vendedor WHERE codigo_Area_Trabajo='1003'
+SELECT Nombre FROM PERSONA WHERE direccion='Santa Catarina'
+SELECT total FROM COMPRA WHERE MONTH(Fecha)='02'
+SELECT * FROM AREA_TRABAJO WHERE Salario>2500
+
+SELECT direccion FROM PERSONA GROUP BY direccion
+SELECT codigo_Area_Trabajo FROM Vendedor GROUP BY codigo_Area_Trabajo
+SELECT peso FROM PRODUCTOS GROUP BY peso
+SELECT dirección FROM PROVEEDOR GROUP BY dirección
+SELECT Nombre FROM PERSONA GROUP BY nombre
+
+SELECT COUNT(codigo_cliente) FROM CLIENTE
+SELECT AVG (PRECIO) FROM PRODUCTOS
+SELECT SUM(salario) FROM AREA_TRABAJO
+SELECT COUNT(nombre) FROM PERSONA
+SELECT COUNT(codigo_vendedor) FROM Vendedor
+
+SELECT Fecha FROM COMPRA GROUP BY Fecha HAVING AVG(Total)>50
+SELECT codigo_proveedor,precio,nombre FROM PRODUCTOS GROUP BY codigo_proveedor,precio,nombre HAVING len(nombre)>5
+SELECT codigo_Area_Trabajo,codigo_vendedor FROM Vendedor GROUP BY codigo_Area_Trabajo, codigo_vendedor HAVING SUBSTRING(codigo_vendedor,3,1)='0'
+SELECT nombre FROM PROVEEDOR GROUP BY nombre HAVING SUBSTRING(nombre,1,1)='Z'
+SELECT Total FROM COMPRA GROUP BY Total HAVING total>50
+
+SELECT TOP 5 * FROM PERSONA 
+SELECT TOP 3 * FROM COMPRA WHERE Total>50
+SELECT TOP 3 * FROM PROVEEDOR WHERE len(nombre)>6
+SELECT TOP 5 * FROM AREA_TRABAJO WHERE Salario>2500 
+SELECT TOP 3 * FROM COMPRA WHERE MONTH(Fecha)='02'
