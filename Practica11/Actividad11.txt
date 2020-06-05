@@ -1,0 +1,85 @@
+CREATE PROCEDURE primerLetNombre(@letra as varchar(1)) AS 
+BEGIN
+	SELECT * FROM personas_compras WHERE SUBSTRING(nombre,1,1)=@letra
+END
+GO
+
+CREATE PROCEDURE comprasUnProducto(@codigoProducto as varchar(30)) AS
+BEGIN
+	SELECT * FROM productos_Compras WHERE codigo=(SELECT codigo FROM PRODUCTOS WHERE codigo=@codigoProducto)
+END
+GO
+
+CREATE PROCEDURE order5BestWithMonth(@mes as varchar(2)) AS
+BEGIN
+     SELECT Top 5 *  FROM personas_compras WHERE MONTH(Fecha)='05' ORDER BY Total 
+END
+GO
+
+CREATE PROCEDURE listPersonsForDireccion(@direccion as varchar(50)) AS
+BEGIN
+ SELECT * FROM personas_compras WHERE direccion=@direccion
+END
+GO
+
+CREATE PROCEDURE ventasDeVenedor(@nombreVendedor as varchar(50)) AS
+BEGIN
+	SELECT * FROM vendedores_ventasActuales WHERE Nombre_vendedor=@nombreVendedor
+END
+GO
+
+CREATE FUNCTION NumStr(@palabra as varchar(100), @numero as int)
+returns varchar(150) AS
+BEGIN
+   return @palabra+CAST(@numero as varchar)
+END
+GO
+
+INSERT INTO PROVEEDOR(codigo,nombre,dirección,telefono)
+VALUES(dbo.NumStr('Alpure',10),'Alpure','San Nicolas','84114322')
+GO
+
+CREATE FUNCTION reponerPorX(@nombre varchar(100))
+returns varchar(100) AS
+BEGIN
+declare @i int
+declare @new varchar(100)
+SET @i=1
+
+	while @i<len(@nombre)
+	BEGIN 
+		SET @nombre= REPLACE(@nombre,SUBSTRING(@nombre,@i,@i),'X')
+		SET @i=@i+1
+	END
+	return @nombre
+END
+GO
+
+INSERT INTO persona(codigo,nombre,Apellidos,Telefono,direccion,Email)
+VALUES('1015K','Karen Elena','Mejia Sol','80453312','Monterrey',dbo.reponerPorX('karen@hotmail.com'))
+
+GO
+CREATE TABLE RespaldoPersonas(
+codigo varchar(30) not null,
+nombre varchar(50) not null,
+Apellidos varchar(50) not null,
+Email varchar(40) not null,
+Telefono varchar(20) not null,
+direccion varchar (50) not null,
+PRIMARY KEY (codigo)
+)
+GO
+
+CREATE TRIGGER respaldarPersonas ON PERSONA
+AFTER DELETE AS
+BEGIN
+INSERT RespaldoPersonas	SELECT * From inserted
+INSERT RespaldoPersonas SELECT * from deleted
+END
+GO
+
+CREATE TRIGGER comprasValidas ON COMPRA
+INSTEAD OF INSERT AS
+BEGIN
+	INSERT INTO COMPRA SELECT * FROM COMPRA WHERE Cantidad_Productos>0
+END
