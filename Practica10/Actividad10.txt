@@ -1,0 +1,32 @@
+CREATE VIEW productos_Compras AS (
+SELECT PRODUCTOS.codigo AS codigoProducto,nombre,precio,COMPRA.codigo, Fecha FROM PRODUCTOS LEFT JOIN COMPRA ON codigo_compra=COMPRA.codigo
+)
+GO
+
+CREATE VIEW vendedores_ventasActuales AS(
+SELECT Persona.nombre as Nombre_vendedor,Apellidos,direccion,Email,fecha,Total,Cantidad_Productos 
+FROM PERSONA LEFT JOIN COMPRA on Persona.codigo=COMPRA.codigo_vendedor
+WHERE PERSONA.codigo=(SELECT codigo_vendedor FROM Vendedor where Persona.codigo=codigo_vendedor)
+GROUP BY Persona.nombre,Apellidos,direccion,Email,fecha,Total,Cantidad_Productos
+)
+GO
+
+CREATE VIEW personas_compras AS(
+SELECT nombre,Apellidos,direccion,Email,Total,Fecha  FROM PERSONA LEFT JOIN COMPRA ON codigo_cliente=Persona.codigo
+WHERE PERSONA.codigo=(SELECT codigo_cliente FROM CLIENTE where PERSONA.codigo=codigo_cliente) 
+GROUP BY nombre,Apellidos,direccion,Email,Total,Fecha
+)
+GO
+
+CREATE VIEW puestos_portoma AS(
+SELECT codigo_vendedor,nombre,descripcion,Salario FROM AREA_TRABAJO CROSS JOIN Vendedor
+GROUP BY codigo_vendedor,codigo_Area_Trabajo,nombre,descripcion,Salario HAVING codigo_vendedor!=codigo_Area_Trabajo
+)
+GO
+
+CREATE VIEW producto_Proveedores AS (
+SELECT Proveedor.nombre as nombreProveedor,dirección,telefono,PRODUCTOS.nombre,descripcion
+FROM PRODUCTOS RIGHT JOIN PROVEEDOR ON PROVEEDOR.codigo=PRODUCTOS.codigo_proveedor
+GROUP BY PRODUCTOS.nombre,descripcion,Proveedor.nombre,dirección,telefono
+)
+GO
