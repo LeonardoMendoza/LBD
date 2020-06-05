@@ -1,0 +1,23 @@
+SELECT Cantidad_Productos,Fecha,Total,precio FROM COMPRA LEFT JOIN PRODUCTOS ON (total/Cantidad_Productos)<precio
+SELECT * FROM AREA_TRABAJO LEFT JOIN Vendedor ON codigo=codigo_Area_Trabajo
+
+SELECT nombre,Apellidos,codigo,Email,numCompras FROM CLIENTE RIGHT JOIN PERSONA ON codigo_cliente=codigo
+SELECT Proveedor.codigo,PROVEEDOR.nombre, telefono, dirección, PRODUCTOS.nombre FROM PROVEEDOR RIGHT JOIN PRODUCTOS ON substring(PRODUCTOS.nombre,1,1)=substring(PROVEEDOR.nombre,1,1)
+
+SELECT * FROM PERSONA INNER JOIN PROVEEDOR ON substring(PROVEEDOR.nombre,1,1)=substring(PERSONA.nombre,1,1)
+SELECT PERSONA.nombre,direccion,Email,PROVEEDOR.nombre FROM PERSONA INNER JOIN PROVEEDOR ON dirección=direccion
+
+SELECT * FROM Vendedor CROSS JOIN CLIENTE
+SELECT Vendedor.codigo_vendedor,codigo_Area_Trabajo,codigo,Fecha,Total FROM Vendedor CROSS JOIN Compra
+
+SELECT * FROM PERSONA WHERE codigo=(SELECT codigo_cliente FROM CLIENTE where codigo=codigo_cliente)
+
+;WITH Datos AS (SELECT nombre,Apellidos,direccion,Email,len(nombre) as nameclientlen
+FROM PERSONA
+WHERE codigo=(SELECT codigo_cliente
+FROM CLIENTE
+where
+codigo=codigo_cliente
+))
+
+SELECT * INTO datosClientes FROM Datos
